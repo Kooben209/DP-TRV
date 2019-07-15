@@ -135,7 +135,7 @@ with requests.session() as s:
 							
 							address = advert.find("h5", {"itemprop" : "address"}).find("span").text
 
-							if address is not None and address.strip() != "":
+							if address is not None and "," in address and address.strip() != "":
 								addressLastParts = address.split(',')[-2].strip().split(' ')
 								addressLastPart = ' '.join(addressLastParts)
 
@@ -148,8 +148,10 @@ with requests.session() as s:
 							price = parseAskingPrice(advert.find("span", {"class" : "amount"}).text)
 							displayPrice = advert.find("span", {"class" : "amount"}).text
 
-							#image1 = advert.find("img", {"itemprop" : "image"}).get('src')
-							image1 = advert.find("div", {"data-test" : "photos"}).find("img").get('src')
+							if advert.find("div", {"data-test" : "photos"}).find("img") is not None:
+								image1 = advert.find("div", {"data-test" : "photos"}).find("img").get('src')
+							else:
+								image1 = ""
 
 							addedOrReduced = datetime.now().date()
 							advertMatch['propId'] = propId
